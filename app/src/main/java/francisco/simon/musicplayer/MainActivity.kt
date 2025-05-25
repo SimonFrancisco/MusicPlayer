@@ -1,5 +1,6 @@
 package francisco.simon.musicplayer
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,11 +11,46 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import francisco.simon.musicplayer.ui.theme.MusicPlayerTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+private const val SPLASH_SCREEN_VISIBILITY = 1000L
 
 class MainActivity : ComponentActivity() {
+    private var isSplashScreenVisible = true
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen().apply {
+            setKeepOnScreenCondition { isSplashScreenVisible }
+            setOnExitAnimationListener { splashScreenViewProvider ->
+                val zoomX = ObjectAnimator.ofFloat(
+                    splashScreenViewProvider.iconView,
+                    "scaleX",
+                    0.4f,
+                    0f
+                )
+                val zoomY = ObjectAnimator.ofFloat(
+                    splashScreenViewProvider.iconView,
+                    "scaleY",
+                    0.4f,
+                    0f
+                )
+                zoomX.duration = 300
+                zoomY.duration = 300
+                zoomX.doOnEnd {
+                    splashScreenViewProvider.remove()
+                }
+                zoomY.doOnEnd {
+                    splashScreenViewProvider.remove()
+                }
+                zoomX.start()
+                zoomY.start()
+            }
+        }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -27,6 +63,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(SPLASH_SCREEN_VISIBILITY)
+            isSplashScreenVisible = false
+        }
     }
 }
 
@@ -38,10 +78,3 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    MusicPlayerTheme {
-//        Greeting("Android")
-//    }
-//}

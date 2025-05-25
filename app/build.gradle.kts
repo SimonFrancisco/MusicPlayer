@@ -70,4 +70,6 @@ dependencies {
 
     implementation(libs.json.serialization)
 
+    implementation(libs.androidx.core.splashscreen)
+
 }
