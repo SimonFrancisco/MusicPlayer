@@ -43,6 +43,8 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koinAnnotations" }
 koin-ksp = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinAnnotations" }
+koin-compose = {module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroid"}
+koin-viewModel = {module = "io.insert-koin:koin-androidx-navigation", version.ref = "koinAndroid"}
 
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }
 room-core = { group = "androidx.room", name = "room-ktx", version.ref = "room_version" }
@@ -86,7 +88,9 @@ compose-debug = [
 ]
 koin = [
     "koin-android",
-    "koin-annotations"
+    "koin-annotations",
+    "koin-compose",
+    "koin-viewModel"
 ]
 
 ksp = [

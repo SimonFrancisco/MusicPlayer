@@ -70,7 +70,6 @@ dependencies {
 
     implementation(libs.bundles.koin)
 
-
     implementation(libs.json.serialization)
 
     implementation(libs.androidx.core.splashscreen)
