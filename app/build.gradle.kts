@@ -58,7 +58,7 @@ dependencies {
 
     ksp(libs.bundles.ksp)
 
-    implementation(libs.dagger2)
+//    implementation(libs.dagger2)
 
     implementation(libs.room.core)
 
@@ -67,6 +67,9 @@ dependencies {
     implementation(libs.bundles.http)
 
     implementation(libs.bundles.retrofit)
+
+    implementation(libs.bundles.koin)
+
 
     implementation(libs.json.serialization)
 

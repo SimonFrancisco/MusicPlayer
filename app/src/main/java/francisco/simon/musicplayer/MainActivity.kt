@@ -5,11 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -18,11 +21,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val SPLASH_SCREEN_VISIBILITY = 1000L
 
 class MainActivity : ComponentActivity() {
     private var isSplashScreenVisible = true
+    private val viewModel: MainViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
             setKeepOnScreenCondition { isSplashScreenVisible }
@@ -56,10 +61,27 @@ class MainActivity : ComponentActivity() {
         setContent {
             MusicPlayerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Column {
+                        Greeting(
+                            name = "Android",
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                        val state = viewModel.state.collectAsState()
+                        if (state.value.isNotEmpty()) {
+                            Text(
+                                text = state.value,
+                                modifier = Modifier.padding(innerPadding),
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        } else {
+                            Text(
+                                text = "Loading...",
+                                modifier = Modifier.padding(innerPadding),
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                    }
+
                 }
             }
         }

@@ -1,6 +1,8 @@
 [versions]
 agp = "8.7.3"
 coreSplashscreen = "1.0.1"
+koinAndroid = "4.0.3"
+koinAnnotations = "2.0.0"
 kotlin = "2.1.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -38,6 +40,10 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
+koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koinAnnotations" }
+koin-ksp = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinAnnotations" }
+
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }
 room-core = { group = "androidx.room", name = "room-ktx", version.ref = "room_version" }
 
@@ -53,7 +59,7 @@ httpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-inter
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit_version" }
 retrofit2GsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit_version" }
 
-json-serialization = {group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "json_version"}
+json-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "json_version" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -78,10 +84,15 @@ compose-debug = [
     "androidx-ui-tooling",
     "androidx-ui-test-manifest"
 ]
+koin = [
+    "koin-android",
+    "koin-annotations"
+]
 
 ksp = [
     "room-compiler",
-    "dagger2-compiler"
+    "koin-ksp",
+    #    "dagger2-compiler"
 ]
 coil = [
     "coil-compose",
