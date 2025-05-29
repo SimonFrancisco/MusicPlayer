@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">MusicPlayer</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
+    <string name="onboarding_text">
+        <![CDATA[
+        From the <highlight>latest</highlight> to the <highlight>greatest</highlight> hits. Play your favorite track on <highlight>Musify</highlight>
+        ]]>
+    </string>
 </resources>
