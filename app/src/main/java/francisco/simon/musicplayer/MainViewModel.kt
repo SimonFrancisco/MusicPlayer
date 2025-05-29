@@ -2,6 +2,7 @@ package francisco.simon.musicplayer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import francisco.simon.musicplayer.data.MusifySession
 import francisco.simon.musicplayer.data.repository.StatusRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,7 +11,7 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class MainViewModel(
-    private val repository: StatusRepository
+    private val repository: StatusRepository,val musifySession: MusifySession
 ) : ViewModel() {
     private val _state  = MutableStateFlow("")
     val state = _state.asStateFlow()
@@ -18,15 +19,13 @@ class MainViewModel(
     init {
         getStatus()
     }
-
+    fun isUserLoggedIn(): Boolean {
+        return musifySession.getToken() != null
+    }
     private fun getStatus() {
         viewModelScope.launch {
-            try {
-                val result = repository.getStatus()
-                _state.value = result
-            } catch (e: Exception) {
-                _state.value = "Error: ${e.message}"
-            }
+            val result = repository.getStatus()
+            _state.value = result
         }
     }
 }

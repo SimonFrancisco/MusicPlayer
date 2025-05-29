@@ -2,6 +2,7 @@ package francisco.simon.musicplayer.ui.feature.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import francisco.simon.musicplayer.data.MusifySession
 import francisco.simon.musicplayer.data.model.RegisterRequest
 import francisco.simon.musicplayer.data.network.Resource
 import francisco.simon.musicplayer.data.repository.AuthenticationRepository
@@ -14,7 +15,9 @@ import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class RegisterViewModel(private val authenticationRepository: AuthenticationRepository) :
+class RegisterViewModel(private val authenticationRepository: AuthenticationRepository,
+                        private val musifySession: MusifySession
+) :
     ViewModel() {
 
     private val _state = MutableStateFlow<RegisterState>(RegisterState.Nothing)
@@ -84,9 +87,16 @@ class RegisterViewModel(private val authenticationRepository: AuthenticationRepo
             }
             _state.value = RegisterState.Loading
             try {
-                val request = RegisterRequest(name, email, password)
+                val request = RegisterRequest(name= name, email = email, password =  password)
                 when (val response = authenticationRepository.register(request)) {
                     is Resource.Success -> {
+                        val loginResponse = response.data
+                        loginResponse.token?.let {
+                            musifySession.saveToken(it)
+                        }
+                        loginResponse.user?.let { user ->
+                            musifySession.saveUserName(user.name!!)
+                        }
                         _state.value = RegisterState.Success
                         _event.emit(RegisterEvent.NavigateToHome)
                     }

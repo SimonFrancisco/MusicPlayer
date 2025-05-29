@@ -2,6 +2,7 @@ package francisco.simon.musicplayer.ui.feature.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import francisco.simon.musicplayer.data.MusifySession
 import francisco.simon.musicplayer.data.model.LoginRequest
 import francisco.simon.musicplayer.data.network.Resource
 import francisco.simon.musicplayer.data.repository.AuthenticationRepository
@@ -14,7 +15,9 @@ import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class LoginViewModel(private val authenticationRepository: AuthenticationRepository) : ViewModel() {
+class LoginViewModel(private val authenticationRepository: AuthenticationRepository,
+                     private val musifySession: MusifySession
+) : ViewModel() {
 
     private val _state = MutableStateFlow<LoginState>(LoginState.Nothing)
     val state: StateFlow<LoginState> = _state
@@ -77,6 +80,13 @@ class LoginViewModel(private val authenticationRepository: AuthenticationReposit
                 val request = LoginRequest(email, password)
                 when (val response = authenticationRepository.login(request)) {
                     is Resource.Success -> {
+                        val loginResponse = response.data
+                        loginResponse.token?.let {
+                            musifySession.saveToken(it)
+                        }
+                        loginResponse.user?.let { user ->
+                            musifySession.saveUserName(user.name!!)
+                        }
                         _state.value = LoginState.Success
                         _event.emit(LoginEvent.NavigateToHome)
                     }

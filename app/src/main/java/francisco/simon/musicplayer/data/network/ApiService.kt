@@ -1,5 +1,6 @@
 package francisco.simon.musicplayer.data.network
 
+import francisco.simon.musicplayer.data.model.HomeDataResponse
 import francisco.simon.musicplayer.data.model.LoginRequest
 import francisco.simon.musicplayer.data.model.LoginResponse
 import francisco.simon.musicplayer.data.model.RegisterRequest
@@ -22,4 +23,7 @@ interface ApiService {
     suspend fun register(
         @Body registerRequest: RegisterRequest
     ): Response<LoginResponse>
+
+    @GET("/home")
+    suspend fun getHomeData(): Response<HomeDataResponse>
 }
