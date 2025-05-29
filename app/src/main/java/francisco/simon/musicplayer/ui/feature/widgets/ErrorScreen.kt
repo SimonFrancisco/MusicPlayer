@@ -15,25 +15,20 @@ fun ErrorScreen(
     primaryButton: String,
     secondaryButton: String? = null,
     onPrimaryButtonClicked: () -> Unit,
-    onSecondaryButtonClicked: (() -> Unit)? = null
+    onSecondaryButtonClicked: (() -> Unit)? = null,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Text(text = errorMessage)
-        Button(
-            onClick = onPrimaryButtonClicked
-        ) {
+        Button(onClick = onPrimaryButtonClicked) {
             Text(text = primaryButton)
         }
-        secondaryButton?.let { text ->
-            Button(onClick = {
-                onSecondaryButtonClicked?.invoke()
-            }) {
-                Text(text = text)
+        secondaryButton?.let {
+            Button(onClick = { onSecondaryButtonClicked?.invoke() }) {
+                Text(text = it)
             }
         }
     }

@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import francisco.simon.musicplayer.R
 import francisco.simon.musicplayer.ui.feature.widgets.HighlightedText
+import francisco.simon.musicplayer.ui.navigation.LoginRoute
+import francisco.simon.musicplayer.ui.navigation.OnboardingRoute
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
@@ -50,8 +52,14 @@ fun OnboardingScreen(
         viewModel.event.collectLatest {
             when (it) {
                 is OnboardingEvent.ShowErrorMessage -> {
-                    Toast.makeText(navController.context, it.message, Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(navController.context, it.message, Toast.LENGTH_SHORT).show()
+                }
+                is OnboardingEvent.NavigateToLogin -> {
+                    navController.navigate(LoginRoute){
+                        popUpTo(OnboardingRoute) {
+                            inclusive = true
+                        }
+                    }
                 }
             }
         }
@@ -91,7 +99,10 @@ fun OnboardingScreen(
                                 cardHeight.value = with(density){
                                     heightPx.toDp()
                                 }
-                            }
+                            },
+                        onClick = {
+                            viewModel.onGetStartedClicked()
+                        }
                     )
                 }
 
@@ -101,7 +112,7 @@ fun OnboardingScreen(
 }
 
 @Composable
-fun OnBoardingCard(modifier: Modifier = Modifier) {
+fun OnBoardingCard(modifier: Modifier = Modifier, onClick:()->Unit) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -144,6 +155,7 @@ fun OnBoardingCard(modifier: Modifier = Modifier) {
             }
         }
         Button(onClick = {
+            onClick()
         }, modifier = Modifier.fillMaxWidth()) {
             Text("Get started", style = MaterialTheme.typography.labelLarge)
         }

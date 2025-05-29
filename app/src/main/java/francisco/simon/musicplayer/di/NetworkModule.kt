@@ -10,7 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 class NetworkModule {
-
     @Single
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
