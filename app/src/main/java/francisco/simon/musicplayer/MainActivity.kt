@@ -9,14 +9,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
-import francisco.simon.musicplayer.ui.feature.home.HomeScreen
-import francisco.simon.musicplayer.ui.feature.onboarding.OnboardingScreen
+import francisco.simon.musicplayer.ui.navigation.AppNavGraph
+import francisco.simon.musicplayer.ui.navigation.HomeRoute
+import francisco.simon.musicplayer.ui.navigation.OnboardingRoute
 import francisco.simon.musicplayer.ui.theme.MusicPlayerTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -63,11 +62,19 @@ class MainActivity : ComponentActivity() {
             MusicPlayerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
-                        OnboardingScreen(rememberNavController())
+                        AppNavGraph(
+                            navController = rememberNavController(),
+                            startDestination = if (viewModel.isUserLoggedIn()) {
+                                HomeRoute
+                            } else {
+                                OnboardingRoute
+                            }
+                        )
+
                     }
 
-
                 }
+
             }
         }
         CoroutineScope(Dispatchers.IO).launch {
@@ -77,11 +84,4 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
