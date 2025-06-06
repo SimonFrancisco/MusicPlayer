@@ -1,15 +1,14 @@
 package francisco.simon.musicplayer.ui.navigation
 
-import android.util.Log
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import francisco.simon.musicplayer.ui.feature.home.HomeScreen
 import francisco.simon.musicplayer.ui.feature.login.LoginScreen
 import francisco.simon.musicplayer.ui.feature.onboarding.OnboardingScreen
+import francisco.simon.musicplayer.ui.feature.playsong.PlaySongScreen
 import francisco.simon.musicplayer.ui.feature.register.RegisterScreen
 
 @Composable
@@ -23,7 +22,7 @@ fun AppNavGraph(navController: NavHostController, startDestination: MusifyNavRou
                 navController
             )
         }
-        composable<LoginRoute>{
+        composable<LoginRoute> {
             LoginScreen(navController)
         }
         composable<RegisterRoute> {
@@ -32,6 +31,10 @@ fun AppNavGraph(navController: NavHostController, startDestination: MusifyNavRou
         }
         composable<HomeRoute> {
             HomeScreen(navController)
+        }
+        composable<PlaySongRoute> {
+            val route = it.toRoute<PlaySongRoute>()
+            PlaySongScreen(songID = route.id, navController = navController)
         }
     }
 }

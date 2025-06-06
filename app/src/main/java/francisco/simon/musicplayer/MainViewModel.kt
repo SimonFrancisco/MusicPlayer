@@ -16,9 +16,7 @@ class MainViewModel(
     private val _state  = MutableStateFlow("")
     val state = _state.asStateFlow()
 
-    init {
-        getStatus()
-    }
+
     fun isUserLoggedIn(): Boolean {
         return musifySession.getToken() != null
     }

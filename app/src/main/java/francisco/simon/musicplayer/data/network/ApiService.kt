@@ -4,10 +4,12 @@ import francisco.simon.musicplayer.data.model.HomeDataResponse
 import francisco.simon.musicplayer.data.model.LoginRequest
 import francisco.simon.musicplayer.data.model.LoginResponse
 import francisco.simon.musicplayer.data.model.RegisterRequest
+import francisco.simon.musicplayer.data.model.Song
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiService {
 
@@ -26,4 +28,9 @@ interface ApiService {
 
     @GET("/home")
     suspend fun getHomeData(): Response<HomeDataResponse>
+
+    @GET("/songs/{id}")
+    suspend fun getSongById(
+        @Path("id") id: String
+    ): Response<Song>
 }

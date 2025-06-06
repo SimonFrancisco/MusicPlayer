@@ -9,13 +9,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import francisco.simon.musicplayer.ui.navigation.AppNavGraph
+import francisco.simon.musicplayer.ui.navigation.HomeRoute
 import francisco.simon.musicplayer.ui.navigation.OnboardingRoute
 import francisco.simon.musicplayer.ui.theme.MusicPlayerTheme
 import kotlinx.coroutines.CoroutineScope
@@ -63,10 +62,19 @@ class MainActivity : ComponentActivity() {
             MusicPlayerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
-                        AppNavGraph(navController = rememberNavController(), startDestination = OnboardingRoute)
+                        AppNavGraph(
+                            navController = rememberNavController(),
+                            startDestination = if (viewModel.isUserLoggedIn()) {
+                                HomeRoute
+                            } else {
+                                OnboardingRoute
+                            }
+                        )
+
                     }
 
                 }
+
             }
         }
         CoroutineScope(Dispatchers.IO).launch {

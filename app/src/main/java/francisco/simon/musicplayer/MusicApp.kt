@@ -1,6 +1,7 @@
 package francisco.simon.musicplayer
 
 import android.app.Application
+import francisco.simon.musicplayer.data.helper.MusifyNotificationHelper
 import francisco.simon.musicplayer.di.NetworkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -14,5 +15,6 @@ class MusicApp : Application() {
             androidContext(this@MusicApp)
             modules(defaultModule, NetworkModule().module)
         }
+        MusifyNotificationHelper.createNotificationChannel(this)
     }
 }

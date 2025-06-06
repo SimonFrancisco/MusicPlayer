@@ -28,11 +28,10 @@ class HomeViewModel(private val homeRepository: HomeRepository, private  val mus
         return musifySession.getUserName()?: "Guest"
     }
 
-    fun fetchData() {
+    private fun fetchData() {
         viewModelScope.launch {
             _state.value = HomeState.Loading
-            val data = homeRepository.getHomeData()
-            when (data) {
+            when (val data = homeRepository.getHomeData()) {
                 is Resource.Success -> {
                     _state.value = HomeState.Success(data.data)
                 }
@@ -47,5 +46,11 @@ class HomeViewModel(private val homeRepository: HomeRepository, private  val mus
 
     fun onRetryClicked() {
         fetchData()
+    }
+
+    fun onSongClicked(songId:String){
+        viewModelScope.launch {
+            _event.emit(HomeEvent.OnSongClick(songId))
+        }
     }
 }
